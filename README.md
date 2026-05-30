@@ -1,6 +1,6 @@
+# Do Popular Artists Make Popular Music
+By: Gabriel Isaiah Perez
 # Introduction
-Project Title: Do Popular Artists Make Popular Music
-Name: Gabriel Isaiah Perez
 
 # Data Cleaning and Exploratory Data Analysis
 
