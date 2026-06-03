@@ -60,11 +60,11 @@ The first few rows of the cleaned DataFrame (selected columns):
 
 | track_name | track_genre | popularity | danceability | energy | acousticness | speechiness | artist_followers | is_popular |
 |------------|-------------|-----------|-------------|--------|-------------|------------|-----------------|-----------|
-| *[run notebook to populate]* | hip-hop | … | … | … | … | … | … | … |
-| *[run notebook to populate]* | country | … | … | … | … | … | … | … |
-| *[run notebook to populate]* | gospel  | … | … | … | … | … | … | … |
-| *[run notebook to populate]* | latin   | … | … | … | … | … | … | … |
-| *[run notebook to populate]* | tango   | … | … | … | … | … | … | … |
+| For My Hand | hip-hop | 0 | 0.870 | 0.479 | 0.161 | 0.165 | 946,289 | 0 |
+| Just You and Me | country | 0 | 0.585 | 0.340 | 0.767 | 0.024 | 690,851 | 0 |
+| Cincinnati Dancing Pig | gospel | 0 | 0.778 | 0.510 | 0.822 | 0.209 | 46,501 | 0 |
+| Demoliendo Hoteles | latin | 0 | 0.616 | 0.702 | 0.003 | 0.062 | 963,844 | 0 |
+| Malena | tango | 0 | 0.630 | 0.298 | 0.861 | 0.045 | 3,596 | 0 |
 
 ### Univariate Analysis
 
@@ -98,11 +98,11 @@ The table below shows mean audio features and mean popularity by genre, revealin
 
 | track_genre | danceability | energy | valence | acousticness | popularity |
 |-------------|-------------|--------|---------|-------------|-----------|
-| country     | *[run notebook]* | *[run notebook]* | *[run notebook]* | *[run notebook]* | *[run notebook]* |
-| gospel      | *[run notebook]* | *[run notebook]* | *[run notebook]* | *[run notebook]* | *[run notebook]* |
-| hip-hop     | *[run notebook]* | *[run notebook]* | *[run notebook]* | *[run notebook]* | *[run notebook]* |
-| latin       | *[run notebook]* | *[run notebook]* | *[run notebook]* | *[run notebook]* | *[run notebook]* |
-| tango       | *[run notebook]* | *[run notebook]* | *[run notebook]* | *[run notebook]* | *[run notebook]* |
+| country     | 0.555 | 0.597 | 0.521 | 0.321 | 17.028 |
+| gospel      | 0.473 | 0.576 | 0.321 | 0.377 | 41.639 |
+| hip-hop     | 0.736 | 0.683 | 0.551 | 0.194 | 37.759 |
+| latin       | 0.722 | 0.727 | 0.631 | 0.183 | 8.297  |
+| tango       | 0.538 | 0.373 | 0.584 | 0.846 | 19.871 |
 
 Tango stands out with very high acousticness and low energy; hip-hop leads in speechiness; latin tops danceability and valence; gospel sits in a moderate energy, high-acousticness region. These distinct profiles directly motivate our genre classification task in Steps 5–8.
 
@@ -110,11 +110,11 @@ The pivot table below shows mean track popularity by genre and explicit content 
 
 | track_genre | Not Explicit | Explicit |
 |-------------|-------------|---------|
-| country     | *[run notebook]* | *[run notebook]* |
-| gospel      | *[run notebook]* | NaN |
-| hip-hop     | *[run notebook]* | *[run notebook]* |
-| latin       | *[run notebook]* | *[run notebook]* |
-| tango       | *[run notebook]* | NaN |
+| country     | 16.29 | 40.97 |
+| gospel      | 41.64 | NaN   |
+| hip-hop     | 44.54 | 23.29 |
+| latin       | 7.89  | 10.95 |
+| tango       | 19.87 | NaN   |
 
 Gospel and tango have no explicit tracks in this dataset. Among genres that do have explicit content, the popularity gap between explicit and non-explicit tracks varies by genre, hinting that explicit content may interact differently with streaming behavior depending on audience type.
 
@@ -134,7 +134,7 @@ We performed three permutation tests assessing whether `tempo` missingness depen
 
 **Test 1: `tempo` missingness vs. `track_genre` — dependent (MAR)**
 
-Test statistic: Total Variation Distance (TVD) between the genre distribution of tracks with missing tempo and tracks without. After 1,000 permutations, the observed TVD was *[run notebook]* with a p-value of *[run notebook]*. Since p < 0.05, we reject the null and conclude tempo missingness **does depend on genre** — tango in particular contains many acoustic and arhythmic recordings where Spotify's beat-detection fails at higher rates.
+Test statistic: Total Variation Distance (TVD) between the genre distribution of tracks with missing tempo and tracks without. After 1,000 permutations, the observed TVD was **0.1040** with a p-value of **0.0000**. Since p < 0.05, we reject the null and conclude tempo missingness **does depend on genre** — tango in particular contains many acoustic and arhythmic recordings where Spotify's beat-detection fails at higher rates.
 
 <iframe
   src="assets/missingness_genre.html"
@@ -147,11 +147,11 @@ Test statistic: Total Variation Distance (TVD) between the genre distribution of
 
 **Test 2: `tempo` missingness vs. `energy` — dependent (MAR)**
 
-Test statistic: absolute difference in mean energy between missing and non-missing groups. The observed difference was *[run notebook]* with a p-value of *[run notebook]*. Since p < 0.05, we reject the null and conclude tempo missingness **does depend on energy** — low-energy tracks (quiet, sparse recordings) are less likely to have a detectable beat.
+Test statistic: absolute difference in mean energy between missing and non-missing groups. The observed difference was **0.0971** with a p-value of **0.0000**. Since p < 0.05, we reject the null and conclude tempo missingness **does depend on energy** — low-energy tracks (quiet, sparse recordings) are less likely to have a detectable beat.
 
 **Test 3: `tempo` missingness vs. `mode` — not dependent**
 
-Test statistic: TVD between mode distributions (major vs. minor) of missing and non-missing groups. Observed TVD was *[run notebook]* with a p-value of *[run notebook]*. Since p ≥ 0.05, we fail to reject the null — tempo missingness **does not depend on musical mode**. Whether a track is in a major or minor key has no mechanistic connection to whether Spotify can detect its tempo.
+Test statistic: TVD between mode distributions (major vs. minor) of missing and non-missing groups. Observed TVD was **0.0150** with a p-value of **0.3770**. Since p ≥ 0.05, we fail to reject the null — tempo missingness **does not depend on musical mode**. Whether a track is in a major or minor key has no mechanistic connection to whether Spotify can detect its tempo.
 
 ---
 
@@ -171,7 +171,7 @@ Test statistic: TVD between mode distributions (major vs. minor) of missing and 
 
 **Method**: Permutation test with 10,000 iterations. We shuffle the popularity labels, breaking any real association between follower count and popularity, and compute the null distribution of the test statistic. No distributional assumptions are needed — appropriate because popularity is heavily right-skewed.
 
-**Result**: The observed mean difference was *[run notebook]*. The one-sided p-value was *[run notebook]*.
+**Result**: The observed mean difference was **−3.2655**. The one-sided p-value was **1.0000**.
 
 Since p ≥ 0.05, we **fail to reject H₀**. There is no statistically significant evidence that tracks from high-follower artists are more popular. The observed difference was actually negative, suggesting that within these five genres, a large following does not translate to higher track-level popularity. This is consistent with how Spotify's popularity metric works — it reflects *recency of streaming activity*, not artist prestige. A track from a lesser-known artist can score highly if it was recently streamed frequently, while an archived track from a major artist may score near zero.
 
@@ -227,8 +227,8 @@ A shallow decision tree (max depth = 3, at most 8 leaf nodes) was chosen as the 
 
 | Split | Accuracy |
 |-------|---------|
-| Train | *[run notebook]* |
-| Test | *[run notebook]* |
+| Train | 0.4670 |
+| Test | 0.4480 |
 | Random baseline | 0.2000 (5 balanced classes) |
 
 The baseline achieves substantially better-than-random accuracy, confirming that `acousticness` and `energy` alone carry genuine genre signal. However, with only two quantitative features and very limited depth, the model cannot capture the full complexity of genre boundaries — motivating the improvements in Step 7.
@@ -255,9 +255,9 @@ Additionally, `SimpleImputer(strategy='median')` was applied to the `tempo` colu
 
 | Hyperparameter | Values Searched | Best Value |
 |----------------|----------------|-----------|
-| `n_estimators` | 100, 200 | *[run notebook]* |
-| `max_depth` | 10, 20, None | *[run notebook]* |
-| `min_samples_leaf` | 1, 3 | *[run notebook]* |
+| `n_estimators` | 100, 200 | 200 |
+| `max_depth` | 10, 20, None | None |
+| `min_samples_leaf` | 1, 3 | 1 |
 
 `n_estimators` was tuned because more trees reduce ensemble variance. `max_depth` controls the bias-variance tradeoff — unlimited depth allows complex genre boundaries but risks overfitting. `min_samples_leaf` acts as regularization, preventing leaves that memorize tiny clusters.
 
@@ -265,9 +265,9 @@ Additionally, `SimpleImputer(strategy='median')` was applied to the `tempo` colu
 
 | Model | Train Accuracy | Test Accuracy |
 |-------|---------------|--------------|
-| Baseline (Decision Tree, depth=3) | *[run notebook]* | *[run notebook]* |
-| Final (Random Forest + GridSearchCV) | *[run notebook]* | *[run notebook]* |
-| Improvement | — | *[run notebook]* |
+| Baseline (Decision Tree, depth=3) | 0.4670 | 0.4480 |
+| Final (Random Forest + GridSearchCV) | 0.9805 | 0.7790 |
+| Improvement | — | +0.3310 |
 
 The Final Model improves substantially over the baseline. The Random Forest benefits from the full audio feature suite, the `energy_x_dance` interaction term, and the semantically grounded `speechiness` binarization — all of which expose genre-discriminative signals that the shallow decision tree could not capture.
 
@@ -305,10 +305,10 @@ The Final Model improves substantially over the baseline. The Random Forest bene
 
 | Group | Accuracy |
 |-------|---------|
-| Explicit tracks | *[run notebook]* |
-| Non-explicit tracks | *[run notebook]* |
-| Observed \|difference\| | *[run notebook]* |
-| p-value (two-sided) | *[run notebook]* |
+| Explicit tracks | 0.7798 |
+| Non-explicit tracks | 0.7789 |
+| Observed \|difference\| | 0.0009 |
+| p-value (two-sided) | 1.0000 |
 
 Since p ≥ 0.05, we **fail to reject H₀**. There is no statistically significant evidence of an accuracy gap between explicit and non-explicit tracks. Any observed difference is consistent with random variation in group membership. The model appears to be **fair with respect to explicit content status**.
 
