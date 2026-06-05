@@ -295,7 +295,7 @@ The Final Model improves substantially over the baseline. The Random Forest bene
 
 **Alternative Hypothesis (H₁)**: The model's accuracy differs between explicit and non explicit tracks.
 
-**Test statistic**: |accuracy(explicit)  accuracy(non-explicit)| — two sided, since we have no prior reason to expect which direction any bias would run.
+**Test statistic**: |accuracy(explicit)  accuracy(non-explicit)| two sided, since we have no prior reason to expect which direction any bias would run.
 
 **Significance level**: α = 0.05
 
