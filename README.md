@@ -46,7 +46,7 @@ I performed the following cleaning steps before analysis:
 
 1. **Parsed `release_date` → `release_year`**: The raw column mixed three date formats (YYYY-MM-DD, YYYY-MM, YYYY). Extracted only the four digit year and dropped the original column.
 
-2. **Filtered to five genres**: I retained only rows where `track_genre` is one of hip-hop, country, gospel, tango, or latin. These five are musically distinct across all key audio dimensions — hip-hop has high speechiness and low acousticness; tango has very high acousticness and a distinctive tempo; gospel is choir driven with high acousticness; country is vocal and acoustic; latin is dance-oriented with high energy.
+2. **Filtered to five genres**: I retained only rows where `track_genre` is one of hip-hop, country, gospel, tango, or latin. These five are musically distinct across all key audio dimensions. Hip-hop has high speechiness and low acousticness, tango has very high acousticness and a distinctive tempo, gospel is choir driven with high acousticness, country is vocal and acoustic, and latin is dance oriented with high energy.
 
 3. **Extracted the primary artist**: The `artists` column sometimes lists multiple artists separated by semicolons. I split on `;` and kept the first name as `primary_artist` for use as the join key.
 
@@ -77,11 +77,11 @@ The histogram below shows the distribution of track popularity scores broken dow
   frameborder="0"
 ></iframe>
 
-Popularity scores are heavily skewed toward zero across all five genres, with a large spike at 0 representing tracks with little to no recent streaming activity. Hip-hop and latin tracks show a broader spread toward higher popularity values, while gospel and tango are more concentrated near zero — suggesting these genres attract smaller streaming audiences on Spotify.
+Popularity scores are heavily skewed toward zero across all five genres, with a large spike at 0 representing tracks with little to no recent streaming activity. Hip-hop and latin tracks show a broader spread toward higher popularity values, while gospel and tango are more concentrated near zero suggesting that these genres attract smaller streaming audiences on Spotify.
 
 ### Bivariate Analysis
 
-The scatter plot below shows the relationship between an artist's log₁₀-transformed follower count and their tracks' popularity scores, colored by genre.
+The scatter plot below shows the relationship between an artist's log₁₀ transformed follower count and their tracks' popularity scores, colored by genre.
 
 <iframe
   src="assets/popularity_vs_followers.html"
@@ -90,7 +90,7 @@ The scatter plot below shows the relationship between an artist's log₁₀-tran
   frameborder="0"
 ></iframe>
 
-Despite some clustering at the high-follower, high-popularity corner, the overall relationship between artist followers and track popularity is weak across all five genres. Tracks from artists with very few followers span the full popularity range, and many tracks from well-followed artists score near zero — suggesting follower count alone is a poor predictor of streaming popularity.
+Despite some clustering at the high follower, high popularity corner, the overall relationship between artist followers and track popularity is weak across all five genres. Tracks from artists with very few followers span the full popularity range, and many tracks from well followed artists score near zero, suggesting follower count alone is a poor predictor of streaming popularity.
 
 ### Interesting Aggregates
 
@@ -104,7 +104,7 @@ The table below shows mean audio features and mean popularity by genre, revealin
 | latin       | 0.722 | 0.727 | 0.631 | 0.183 | 8.297  |
 | tango       | 0.538 | 0.373 | 0.584 | 0.846 | 19.871 |
 
-Tango stands out with very high acousticness and low energy; hip-hop leads in speechiness; latin tops danceability and valence; gospel sits in a moderate energy, high-acousticness region. These distinct profiles directly motivate our genre classification task in Steps 5–8.
+Tango stands out with very high acousticness and low energy, hip-hop leads in speechiness, latin tops danceability and valence, and gospel sits in a moderate energy, high-acousticness region. These distinct profiles directly motivate our genre classification task in Steps 5–8.
 
 The pivot table below shows mean track popularity by genre and explicit content status.
 
@@ -116,7 +116,7 @@ The pivot table below shows mean track popularity by genre and explicit content 
 | latin       | 7.89  | 10.95 |
 | tango       | 19.87 | NaN   |
 
-Gospel and tango have no explicit tracks in this dataset. Among genres that do have explicit content, the popularity gap between explicit and non-explicit tracks varies by genre, hinting that explicit content may interact differently with streaming behavior depending on audience type.
+Gospel and tango have no explicit tracks in this dataset. Among genres that do have explicit content, the popularity gap between explicit and non explicit tracks varies by genre, hinting that explicit content may interact differently with streaming behavior depending on audience type.
 
 ---
 
