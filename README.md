@@ -13,12 +13,12 @@ This project investigates the following central question:
 
 This question matters to listeners, labels, and independent artists alike. If follower count strongly predicts track popularity, it suggests platform success is self-reinforcing — the famous get more famous regardless of the music itself. If follower count does *not* predict popularity, it implies that audio characteristics or release timing play a more decisive role, which is encouraging for smaller artists.
 
-We analyze two datasets joined on artist name:
+I analyzed two datasets joined on artist name:
 
 - **`music_tracks`**: 114,000 rows × 21 columns — one row per Spotify track, with Spotify-computed audio features.
 - **`artists`**: 1.2 million rows × 5 columns — one row per artist, with follower counts and genre tags.
 
-We focus on five musically distinct genres ( **hip-hop**, **country**, **gospel**, **tango**, and **latin** ) which together span a wide range of audio characteristics and make for a meaningful cross genre comparison.
+I focused on five musically distinct genres ( **hip-hop**, **country**, **gospel**, **tango**, and **latin** ) which together span a wide range of audio characteristics and make for a meaningful cross genre comparison.
 
 The columns most relevant to our central question are:
 
@@ -42,15 +42,15 @@ The columns most relevant to our central question are:
 
 ### Data Cleaning
 
-We performed the following cleaning steps before analysis:
+I performed the following cleaning steps before analysis:
 
-1. **Parsed `release_date` → `release_year`**: The raw column mixed three date formats (YYYY-MM-DD, YYYY-MM, YYYY). We extracted only the four digit year and dropped the original column.
+1. **Parsed `release_date` → `release_year`**: The raw column mixed three date formats (YYYY-MM-DD, YYYY-MM, YYYY). Extracted only the four digit year and dropped the original column.
 
-2. **Filtered to five genres**: We retained only rows where `track_genre` is one of hip-hop, country, gospel, tango, or latin. These five are musically distinct across all key audio dimensions — hip-hop has high speechiness and low acousticness; tango has very high acousticness and a distinctive tempo; gospel is choir-driven with high acousticness; country is vocal and acoustic; latin is dance-oriented with high energy.
+2. **Filtered to five genres**: I retained only rows where `track_genre` is one of hip-hop, country, gospel, tango, or latin. These five are musically distinct across all key audio dimensions — hip-hop has high speechiness and low acousticness; tango has very high acousticness and a distinctive tempo; gospel is choir driven with high acousticness; country is vocal and acoustic; latin is dance-oriented with high energy.
 
-3. **Extracted the primary artist**: The `artists` column sometimes lists multiple artists separated by semicolons. We split on `;` and kept the first name as `primary_artist` for use as the join key.
+3. **Extracted the primary artist**: The `artists` column sometimes lists multiple artists separated by semicolons. I split on `;` and kept the first name as `primary_artist` for use as the join key.
 
-4. **Cleaned the artists table**: Empty genre lists (`'[]'`) were replaced with `NaN`. Missing follower counts were filled with `0.0`. We deduplicated by keeping the entry with the highest follower count per artist name.
+4. **Cleaned the artists table**: Empty genre lists (`'[]'`) were replaced with `NaN`. Missing follower counts were filled with `0.0`. I deduplicated by keeping the entry with the highest follower count per artist name.
 
 5. **Merged artist-level data**: Left join on `primary_artist` → `name`, adding `artist_followers` and `artist_popularity` to each track. Unmatched tracks received `artist_followers = 0.0` and `artist_popularity` = the column median.
 
@@ -124,13 +124,13 @@ Gospel and tango have no explicit tracks in this dataset. Among genres that do h
 
 ### NMAR Analysis
 
-The column with the most meaningful missingness in our cleaned dataset is **`tempo`**, missing for approximately 21% of tracks. We believe `tempo` is **not NMAR** (Not Missing At Random). For tempo to be NMAR, its missingness probability would need to depend on the unobserved tempo value itself — for example, Spotify's beat-detection algorithm failing specifically on tracks with unusually high or low BPM. While mechanistically plausible, our permutation tests below show that missingness is well-explained by observed columns (`track_genre` and `energy`), which is consistent with MAR rather than NMAR.
+The column with the most meaningful missingness in our cleaned dataset is **`tempo`**, missing for approximately 21% of tracks. I believe `tempo` is **not NMAR** (Not Missing At Random). For tempo to be NMAR, its missingness probability would need to depend on the unobserved tempo value itself — for example, Spotify's beat-detection algorithm failing specifically on tracks with unusually high or low BPM. While mechanistically plausible, our permutation tests below show that missingness is well-explained by observed columns (`track_genre` and `energy`), which is consistent with MAR rather than NMAR.
 
 To rule out NMAR more definitively, we would want: raw Spotify API response logs showing whether tempo extraction returned an error vs. a null, or a flag for tracks with irregular or free-form time signatures. If very fast or very slow tempos are disproportionately missing, that would support NMAR; if failure rates are uniform within genre and energy strata, that supports MAR.
 
 ### Missingness Dependency
 
-We performed three permutation tests assessing whether `tempo` missingness depends on other columns.
+I performed three permutation tests assessing whether `tempo` missingness depends on other columns.
 
 **Test 1: `tempo` missingness vs. `track_genre` — dependent (MAR)**
 
@@ -198,7 +198,7 @@ Our hypothesis test found that artist follower count is not a reliable predictor
 
 **Features known at prediction time**: When a new track is uploaded to Spotify, the platform immediately computes all audio features (`danceability`, `energy`, `key`, `loudness`, `mode`, `speechiness`, `acousticness`, `instrumentalness`, `liveness`, `valence`, `tempo`, `time_signature`) and records `explicit` and `duration_ms`. All of these are available at the time of prediction.
 
-We **exclude** the following:
+I **excluded** the following:
 - `popularity` — accumulates over time; unknown for a brand-new track
 - `artist_followers` / `artist_popularity` — not intrinsic to the track and shown in Step 4 to be uninformative
 - `release_year` — adds noise without a clear genre signal in this dataset
