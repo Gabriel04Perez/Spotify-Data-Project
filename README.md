@@ -15,7 +15,7 @@ This question matters to listeners, labels, and independent artists alike. If fo
 
 We analyze two datasets joined on artist name:
 
-- **`music_tracks`**: 114,000 rows × 20 columns — one row per Spotify track, with Spotify-computed audio features.
+- **`music_tracks`**: 114,000 rows × 21 columns — one row per Spotify track, with Spotify-computed audio features.
 - **`artists`**: 1.2 million rows × 5 columns — one row per artist, with follower counts and genre tags.
 
 We focus on five musically distinct genres — **hip-hop**, **country**, **gospel**, **tango**, and **latin** — which together span a wide range of audio characteristics and make for a meaningful cross-genre comparison.
@@ -60,11 +60,11 @@ The first few rows of the cleaned DataFrame (selected columns):
 
 | track_name | track_genre | popularity | danceability | energy | acousticness | speechiness | artist_followers | is_popular |
 |------------|-------------|-----------|-------------|--------|-------------|------------|-----------------|-----------|
-| For My Hand | hip-hop | 0 | 0.870 | 0.479 | 0.161 | 0.165 | 946,289 | 0 |
 | Just You and Me | country | 0 | 0.585 | 0.340 | 0.767 | 0.024 | 690,851 | 0 |
-| Cincinnati Dancing Pig | gospel | 0 | 0.778 | 0.510 | 0.822 | 0.209 | 46,501 | 0 |
-| Demoliendo Hoteles | latin | 0 | 0.616 | 0.702 | 0.003 | 0.062 | 963,844 | 0 |
-| Malena | tango | 0 | 0.630 | 0.298 | 0.861 | 0.045 | 3,596 | 0 |
+| Born Again | country | 0 | 0.476 | 0.888 | 0.013 | 0.053 | 906,755 | 0 |
+| Go Amanda | country | 0 | 0.326 | 0.716 | 0.002 | 0.031 | 206,226 | 0 |
+| Excitable Boy | country | 0 | 0.628 | 0.854 | 0.083 | 0.034 | 690,851 | 0 |
+| Jerusalem | country | 0 | 0.445 | 0.776 | 0.003 | 0.035 | 206,226 | 0 |
 
 ### Univariate Analysis
 
