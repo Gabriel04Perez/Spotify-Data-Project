@@ -18,7 +18,7 @@ We analyze two datasets joined on artist name:
 - **`music_tracks`**: 114,000 rows × 21 columns — one row per Spotify track, with Spotify-computed audio features.
 - **`artists`**: 1.2 million rows × 5 columns — one row per artist, with follower counts and genre tags.
 
-We focus on five musically distinct genres — **hip-hop**, **country**, **gospel**, **tango**, and **latin** — which together span a wide range of audio characteristics and make for a meaningful cross-genre comparison.
+We focus on five musically distinct genres ( **hip-hop**, **country**, **gospel**, **tango**, and **latin** ) which together span a wide range of audio characteristics and make for a meaningful cross genre comparison.
 
 The columns most relevant to our central question are:
 
@@ -26,11 +26,11 @@ The columns most relevant to our central question are:
 |--------|-------------|
 | `popularity` | Track's Spotify popularity score (0–100); reflects recent and frequent streaming |
 | `artist_followers` | Number of Spotify followers for the track's primary artist |
-| `track_genre` | Musical genre (one of: hip-hop, country, gospel, tango, latin) |
+| `track_genre` | Musical genre (hip-hop, country, gospel, tango, latin) |
 | `danceability` | How suitable for dancing (0 = least, 1 = most) |
 | `energy` | Perceptual measure of intensity and activity (0 = least, 1 = most) |
 | `acousticness` | Confidence that the track is acoustic (0 = least, 1 = most) |
-| `speechiness` | Presence of spoken words; > 0.33 indicates rap or vocal-heavy content |
+| `speechiness` | Presence of spoken words: > 0.33 indicates rap or vocal-heavy content |
 | `valence` | Musical positiveness (0 = negative, 1 = positive) |
 | `tempo` | Estimated tempo in BPM |
 | `explicit` | Whether the track contains explicit content (`True`/`False`) |
@@ -44,7 +44,7 @@ The columns most relevant to our central question are:
 
 We performed the following cleaning steps before analysis:
 
-1. **Parsed `release_date` → `release_year`**: The raw column mixed three date formats (YYYY-MM-DD, YYYY-MM, YYYY). We extracted only the four-digit year and dropped the original column.
+1. **Parsed `release_date` → `release_year`**: The raw column mixed three date formats (YYYY-MM-DD, YYYY-MM, YYYY). We extracted only the four digit year and dropped the original column.
 
 2. **Filtered to five genres**: We retained only rows where `track_genre` is one of hip-hop, country, gospel, tango, or latin. These five are musically distinct across all key audio dimensions — hip-hop has high speechiness and low acousticness; tango has very high acousticness and a distinctive tempo; gospel is choir-driven with high acousticness; country is vocal and acoustic; latin is dance-oriented with high energy.
 
