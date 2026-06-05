@@ -295,22 +295,22 @@ The Final Model improves substantially over the baseline. The Random Forest bene
 
 **Alternative Hypothesis (H₁)**: The model's accuracy differs between explicit and non explicit tracks.
 
-**Test statistic**: |accuracy(explicit)  accuracy(non-explicit)| two sided, since we have no prior reason to expect which direction any bias would run.
+**Test statistic**: |accuracy(explicit)  accuracy(non explicit)| two sided, since we have no prior reason to expect which direction any bias would run.
 
 **Significance level**: α = 0.05
 
-**Method**: Permutation test with 1,000 iterations. We fix the model's predictions on the test set and shuffle only the explicit/non-explicit group labels. The model is never refit during the test.
+**Method**: Permutation test with 1,000 iterations. We fix the model's predictions on the test set and shuffle only the explicit/non explicit group labels. The model is never refit during the test.
 
 **Results**:
 
 | Group | Accuracy |
 |-------|---------|
 | Explicit tracks | 0.7798 |
-| Non-explicit tracks | 0.7789 |
+| Non explicit tracks | 0.7789 |
 | Observed \|difference\| | 0.0009 |
-| p-value (two-sided) | 1.0000 |
+| p-value (two sided) | 1.0000 |
 
-Since p ≥ 0.05, we **fail to reject H₀**. There is no statistically significant evidence of an accuracy gap between explicit and non-explicit tracks. Any observed difference is consistent with random variation in group membership. The model appears to be **fair with respect to explicit content status**.
+Since p ≥ 0.05, we **fail to reject H₀**. There is no statistically significant evidence of an accuracy gap between explicit and non explicit tracks. Any observed difference is consistent with random variation in group membership. The model appears to be **fair with respect to explicit content status**.
 
 <iframe
   src="assets/fairness_test.html"
