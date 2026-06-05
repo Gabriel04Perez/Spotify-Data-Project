@@ -18,7 +18,7 @@ I analyzed two datasets joined on artist name:
 - **`music_tracks`**: 114,000 rows × 21 columns — one row per Spotify track, with Spotify-computed audio features.
 - **`artists`**: 1.2 million rows × 5 columns — one row per artist, with follower counts and genre tags.
 
-I focused on five musically distinct genres ( **hip-hop**, **country**, **gospel**, **tango**, and **latin** ) which together span a wide range of audio characteristics and make for a meaningful cross genre comparison.
+I focused on five musically distinct genres (**hip-hop**, **country**, **gospel**, **tango**, and **latin**) which together span a wide range of audio characteristics and make for a meaningful cross genre comparison.
 
 The columns most relevant to our central question are:
 
