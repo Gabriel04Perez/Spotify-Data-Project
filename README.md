@@ -11,11 +11,11 @@ This project investigates the following central question:
 
 > **Do tracks from artists with more followers tend to be more popular than tracks from artists with fewer followers?**
 
-This question matters to listeners, labels, and independent artists alike. If follower count strongly predicts track popularity, it suggests platform success is self-reinforcing — the famous get more famous regardless of the music itself. If follower count does *not* predict popularity, it implies that audio characteristics or release timing play a more decisive role, which is encouraging for smaller artists.
+This question matters to listeners, labels, and independent artists alike. If follower count strongly predicts track popularity, it suggests platform success is self reinforcing, meaning the famous get more famous regardless of the music itself. If follower count does *not* predict popularity, it implies that audio characteristics or release timing play a more decisive role, which is encouraging for smaller artists.
 
 I analyzed two datasets joined on artist name:
 
-- **`music_tracks`**: 114,000 rows × 21 columns — one row per Spotify track, with Spotify-computed audio features.
+- **`music_tracks`**: 114,000 rows × 21 columns — one row per Spotify track, with Spotify computed audio features.
 - **`artists`**: 1.2 million rows × 5 columns — one row per artist, with follower counts and genre tags.
 
 I focused on five musically distinct genres (**hip-hop**, **country**, **gospel**, **tango**, and **latin**) which together span a wide range of audio characteristics and make for a meaningful cross genre comparison.
@@ -30,7 +30,7 @@ The columns most relevant to our central question are:
 | `danceability` | How suitable for dancing (0 = least, 1 = most) |
 | `energy` | Perceptual measure of intensity and activity (0 = least, 1 = most) |
 | `acousticness` | Confidence that the track is acoustic (0 = least, 1 = most) |
-| `speechiness` | Presence of spoken words: > 0.33 indicates rap or vocal-heavy content |
+| `speechiness` | Presence of spoken words: > 0.33 indicates rap or vocal heavy content |
 | `valence` | Musical positiveness (0 = negative, 1 = positive) |
 | `tempo` | Estimated tempo in BPM |
 | `explicit` | Whether the track contains explicit content (`True`/`False`) |
@@ -52,7 +52,7 @@ I performed the following cleaning steps before analysis:
 
 4. **Cleaned the artists table**: Empty genre lists (`'[]'`) were replaced with `NaN`. Missing follower counts were filled with `0.0`. I deduplicated by keeping the entry with the highest follower count per artist name.
 
-5. **Merged artist-level data**: Left join on `primary_artist` → `name`, adding `artist_followers` and `artist_popularity` to each track. Unmatched tracks received `artist_followers = 0.0` and `artist_popularity` = the column median.
+5. **Merged artist level data**: Left join on `primary_artist` → `name`, adding `artist_followers` and `artist_popularity` to each track. Unmatched tracks received `artist_followers = 0.0` and `artist_popularity` = the column median.
 
 6. **Created `is_popular`**: A binary label equal to `1` if popularity ≥ 70, else `0`. Used as the classification target in Steps 5–8.
 
@@ -104,7 +104,7 @@ The table below shows mean audio features and mean popularity by genre, revealin
 | latin       | 0.722 | 0.727 | 0.631 | 0.183 | 8.297  |
 | tango       | 0.538 | 0.373 | 0.584 | 0.846 | 19.871 |
 
-Tango stands out with very high acousticness and low energy, hip-hop leads in speechiness, latin tops danceability and valence, and gospel sits in a moderate energy, high-acousticness region. These distinct profiles directly motivate our genre classification task in Steps 5–8.
+Tango stands out with very high acousticness and low energy, hip-hop leads in speechiness, latin tops danceability and valence, and gospel sits in a moderate energy, high acousticness region. These distinct profiles directly motivate our genre classification task in Steps 5–8.
 
 The pivot table below shows mean track popularity by genre and explicit content status.
 
@@ -147,7 +147,7 @@ Test statistic: Total Variation Distance (TVD) between the genre distribution of
 
 **Test 2: `tempo` missingness vs. `energy` — dependent (MAR)**
 
-Test statistic: absolute difference in mean energy between missing and non missing groups. The observed difference was **0.0971** with a p-value of **0.0000**. Since p < 0.05, we reject the null and conclude tempo missingness **does depend on energy**. Low-energy tracks (quiet, sparse recordings) are less likely to have a detectable beat.
+Test statistic: absolute difference in mean energy between missing and non missing groups. The observed difference was **0.0971** with a p-value of **0.0000**. Since p < 0.05, we reject the null and conclude tempo missingness **does depend on energy**. Low energy tracks (quiet, sparse recordings) are less likely to have a detectable beat.
 
 **Test 3: `tempo` missingness vs. `mode` — not dependent**
 
@@ -159,21 +159,21 @@ Test statistic: TVD between mode distributions (major vs. minor) of missing and 
 
 **Research question**: Do tracks from artists with more followers tend to be more popular?
 
-**Null Hypothesis (H₀)**: The mean track popularity is the same for tracks from high-follower artists and tracks from low-follower artists. Any observed difference is due to random chance.
+**Null Hypothesis (H₀)**: The mean track popularity is the same for tracks from high follower artists and tracks from low follower artists. Any observed difference is due to random chance.
 
 **Alternative Hypothesis (H₁)**: Tracks from artists with more followers have strictly higher mean track popularity.
 
-**Groups**: Tracks are split at the median of `artist_followers`. Tracks above the median form the high-follower group; tracks at or below form the low-follower group.
+**Groups**: Tracks are split at the median of `artist_followers`. Tracks above the median form the high follower group; tracks at or below form the low follower group.
 
-**Test statistic**: Mean popularity (high-follower) − Mean popularity (low-follower). A positive value would support H₁. We use a one-sided test because our alternative hypothesis is directional.
+**Test statistic**: Mean popularity (high-follower) − Mean popularity (low-follower). A positive value would support H₁. We use a one sided test because our alternative hypothesis is directional.
 
 **Significance level**: α = 0.05
 
-**Method**: Permutation test with 10,000 iterations. We shuffle the popularity labels, breaking any real association between follower count and popularity, and compute the null distribution of the test statistic. No distributional assumptions are needed — appropriate because popularity is heavily right-skewed.
+**Method**: Permutation test with 10,000 iterations. We shuffle the popularity labels, breaking any real association between follower count and popularity, and compute the null distribution of the test statistic. No distributional assumptions are needed. Appropriate because popularity is heavily right skewed.
 
-**Result**: The observed mean difference was **−3.2655**. The one-sided p-value was **1.0000**.
+**Result**: The observed mean difference was **−3.2655**. The one sided p-value was **1.0000**.
 
-Since p ≥ 0.05, we **fail to reject H₀**. There is no statistically significant evidence that tracks from high-follower artists are more popular. The observed difference was actually negative, suggesting that within these five genres, a large following does not translate to higher track-level popularity. This is consistent with how Spotify's popularity metric works — it reflects *recency of streaming activity*, not artist prestige. A track from a lesser-known artist can score highly if it was recently streamed frequently, while an archived track from a major artist may score near zero.
+Since p ≥ 0.05, we **fail to reject H₀**. There is no statistically significant evidence that tracks from high follower artists are more popular. The observed difference was actually negative, suggesting that within these five genres, a large following does not translate to higher track level popularity. This is consistent with how Spotify's popularity metric works since it reflects *recency of streaming activity*, not artist prestige. A track from a lesser known artist can score highly if it was recently streamed frequently, while an archived track from a major artist may score near zero.
 
 <iframe
   src="assets/hypothesis_test.html"
@@ -190,16 +190,16 @@ Since p ≥ 0.05, we **fail to reject H₀**. There is no statistically signific
 
 Our hypothesis test found that artist follower count is not a reliable predictor of track popularity. This pivots us toward a more tractable question driven by the EDA: **can we identify a track's genre purely from its audio features and metadata?**
 
-**Prediction problem**: Predict the `track_genre` of a Spotify track from its audio features and metadata. This is a **5-class multiclass classification** problem (hip-hop, country, gospel, tango, latin).
+**Prediction problem**: Predict the `track_genre` of a Spotify track from its audio features and metadata. This is a **5 class multiclass classification** problem (hip-hop, country, gospel, tango, latin).
 
-**Response variable**: `track_genre`. Genre was chosen because the EDA aggregate table showed that each genre has a highly distinct audio fingerprint — making this a tractable and meaningful classification problem. Genre prediction is also practically useful, powering automatic music tagging, playlist generation, and content recommendation.
+**Response variable**: `track_genre`. Genre was chosen because the EDA aggregate table showed that each genre has a highly distinct audio fingerprint, making this a tractable and meaningful classification problem. Genre prediction is also practically useful, powering automatic music tagging, playlist generation, and content recommendation.
 
-**Evaluation metric**: **Accuracy**. All five genres contribute exactly 1,000 tracks each to our filtered dataset, so the classes are perfectly balanced. Accuracy is therefore not misleading — a naïve random classifier would achieve exactly 20% (1/5 classes), giving us a clear performance floor. We prefer accuracy over macro-F1 because there is no meaningful cost asymmetry between misclassifying different genres.
+**Evaluation metric**: **Accuracy**. All five genres contribute exactly 1,000 tracks each to our filtered dataset, so the classes are perfectly balanced. Accuracy is therefore not misleading as a naïve random classifier would achieve exactly 20% (1/5 classes), giving us a clear performance floor. We prefer accuracy over macro F1 because there is no meaningful cost asymmetry between misclassifying different genres.
 
 **Features known at prediction time**: When a new track is uploaded to Spotify, the platform immediately computes all audio features (`danceability`, `energy`, `key`, `loudness`, `mode`, `speechiness`, `acousticness`, `instrumentalness`, `liveness`, `valence`, `tempo`, `time_signature`) and records `explicit` and `duration_ms`. All of these are available at the time of prediction.
 
 I **excluded** the following:
-- `popularity` — accumulates over time; unknown for a brand-new track
+- `popularity` — accumulates over time; unknown for a brand new track
 - `artist_followers` / `artist_popularity` — not intrinsic to the track and shown in Step 4 to be uninformative
 - `release_year` — adds noise without a clear genre signal in this dataset
 
@@ -217,11 +217,11 @@ I **excluded** the following:
 | `acousticness` | Quantitative | Passthrough (no transformation) |
 | `explicit` | Nominal | `OneHotEncoder(drop='if_binary')` → single 0/1 column |
 
-- **2 quantitative features**: `energy` and `acousticness`. These two were selected because the EDA aggregate table showed the largest cross-genre differences on precisely these dimensions — tango's acousticness (~0.85) vs. hip-hop's (~0.19) is the single most separating feature in the dataset.
+- **2 quantitative features**: `energy` and `acousticness`. These two were selected because the EDA aggregate table showed the largest cross genre differences on precisely these dimensions. Tango's acousticness (~0.85) vs. hip-hop's (~0.19) is the single most separating feature in the dataset.
 - **0 ordinal features**
-- **1 nominal feature**: `explicit`, encoded with `OneHotEncoder(drop='if_binary')` to produce a single binary column. Explicit content is strongly genre-correlated (absent from gospel and tango, common in hip-hop).
+- **1 nominal feature**: `explicit`, encoded with `OneHotEncoder(drop='if_binary')` to produce a single binary column. Explicit content is strongly genre correlated (absent from gospel and tango, common in hip-hop).
 
-A shallow decision tree (max depth = 3, at most 8 leaf nodes) was chosen as the simplest interpretable classifier that can still capture non-linear genre boundaries, while capping depth at 3 prevents memorizing the training set.
+A shallow decision tree (max depth = 3, at most 8 leaf nodes) was chosen as the simplest interpretable classifier that can still capture nonlinear genre boundaries, while capping depth at 3 prevents memorizing the training set.
 
 **Performance**:
 
@@ -231,7 +231,7 @@ A shallow decision tree (max depth = 3, at most 8 leaf nodes) was chosen as the 
 | Test | 0.4480 |
 | Random baseline | 0.2000 (5 balanced classes) |
 
-The baseline achieves substantially better-than-random accuracy, confirming that `acousticness` and `energy` alone carry genuine genre signal. However, with only two quantitative features and very limited depth, the model cannot capture the full complexity of genre boundaries — motivating the improvements in Step 7.
+The baseline achieves substantially better than random accuracy, confirming that `acousticness` and `energy` alone carry genuine genre signal. However, with only two quantitative features and very limited depth, the model cannot capture the full complexity of genre boundaries, motivating the improvements in Step 7.
 
 ---
 
@@ -241,15 +241,15 @@ The baseline achieves substantially better-than-random accuracy, confirming that
 
 **1. `energy_x_dance`** = `energy` × `danceability`
 
-This interaction term captures "dance energy" — the combination of perceptual intensity and rhythmic suitability for dancing. Hip-hop and latin score high on *both* dimensions simultaneously, while tango (low energy, moderate danceability) and gospel (low on both) occupy clearly different regions of this 2-D space. A product feature makes that joint relationship available to the classifier as a single dimension, which matters especially for tree-based models that can only split on one feature at a time.
+This interaction term captures "dance energy" which is the combination of perceptual intensity and rhythmic suitability for dancing. Hip-hop and latin score high on *both* dimensions simultaneously, while tango (low energy, moderate danceability) and gospel (low on both) occupy clearly different regions of this 2D space. A product feature makes that joint relationship available to the classifier as a single dimension, which matters especially for tree based models that can only split on one feature at a time.
 
 **2. Binarized `speechiness`** (threshold = 0.33)
 
-Per the Spotify dataset documentation, `speechiness > 0.33` indicates the track contains significant rap or vocal content. This threshold cleanly separates hip-hop (most tracks above 0.33) from all other genres. Binarizing at this semantically meaningful cut-point is more informative than treating speechiness as a continuous linear scale — the genre signal lies in whether the track *crosses* the threshold, not in the exact value above it.
+Per the Spotify dataset documentation, `speechiness > 0.33` indicates the track contains significant rap or vocal content. This threshold cleanly separates hip-hop (most tracks above 0.33) from all other genres. Binarizing at this semantically meaningful cut point is more informative than treating speechiness as a continuous linear scale since the genre signal lies in whether the track *crosses* the threshold, not in the exact value above it.
 
 Additionally, `SimpleImputer(strategy='median')` was applied to the `tempo` column (21% missing, MAR per Step 3), allowing the full feature to contribute without dropping rows. Median imputation is more robust than mean imputation given tempo's skewed distribution.
 
-**Model**: `RandomForestClassifier` inside a single `sklearn` Pipeline, with hyperparameters selected via 5-fold `GridSearchCV`.
+**Model**: `RandomForestClassifier` inside a single `sklearn` Pipeline, with hyperparameters selected via 5 fold `GridSearchCV`.
 
 **Hyperparameter search**:
 
@@ -259,7 +259,7 @@ Additionally, `SimpleImputer(strategy='median')` was applied to the `tempo` colu
 | `max_depth` | 10, 20, None | None |
 | `min_samples_leaf` | 1, 3 | 1 |
 
-`n_estimators` was tuned because more trees reduce ensemble variance. `max_depth` controls the bias-variance tradeoff — unlimited depth allows complex genre boundaries but risks overfitting. `min_samples_leaf` acts as regularization, preventing leaves that memorize tiny clusters.
+`n_estimators` was tuned because more trees reduce ensemble variance. `max_depth` controls the bias variance tradeoff and unlimited depth allows complex genre boundaries but risks overfitting. `min_samples_leaf` acts as regularization, preventing leaves that memorize tiny clusters.
 
 **Performance**:
 
@@ -269,7 +269,7 @@ Additionally, `SimpleImputer(strategy='median')` was applied to the `tempo` colu
 | Final (Random Forest + GridSearchCV) | 0.9805 | 0.7790 |
 | Improvement | +0.5135 | +0.3310 |
 
-The Final Model improves substantially over the baseline. The Random Forest benefits from the full audio feature suite, the `energy_x_dance` interaction term, and the semantically grounded `speechiness` binarization — all of which expose genre-discriminative signals that the shallow decision tree could not capture.
+The Final Model improves substantially over the baseline. The Random Forest benefits from the full audio feature suite, the `energy_x_dance` interaction term, and the semantically grounded `speechiness` binarization, all of which expose genre discriminative signals that the shallow decision tree could not capture.
 
 <iframe
   src="assets/confusion_matrix.html"
@@ -278,24 +278,24 @@ The Final Model improves substantially over the baseline. The Random Forest bene
   frameborder="0"
 ></iframe>
 
-*Confusion matrix on the held-out test set. Rows are actual genres; columns are predicted genres.*
+*Confusion matrix on the held out test set. Rows are actual genres; columns are predicted genres.*
 
 ---
 
 ## Fairness Analysis
 
 **Group X**: Explicit tracks (`explicit = True`)
-**Group Y**: Non-explicit tracks (`explicit = False`)
+**Group Y**: Non explicit tracks (`explicit = False`)
 
-**Rationale**: In our five-genre dataset, explicit content appears almost exclusively in hip-hop, country, and latin tracks — gospel and tango have zero explicit tracks. This means the model may have implicitly learned that `explicit = True` is a strong genre signal, potentially creating a systematic accuracy gap between the two groups.
+**Rationale**: In our five genre dataset, explicit content appears almost exclusively in hip-hop, country, and latin tracks while gospel and tango have zero explicit tracks. This means the model may have implicitly learned that `explicit = True` is a strong genre signal, potentially creating a systematic accuracy gap between the two groups.
 
 **Evaluation metric**: Accuracy (same as the overall evaluation metric).
 
-**Null Hypothesis (H₀)**: The model's accuracy is the same for explicit and non-explicit tracks. Any observed difference is due to random chance in group membership.
+**Null Hypothesis (H₀)**: The model's accuracy is the same for explicit and non explicit tracks. Any observed difference is due to random chance in group membership.
 
-**Alternative Hypothesis (H₁)**: The model's accuracy differs between explicit and non-explicit tracks.
+**Alternative Hypothesis (H₁)**: The model's accuracy differs between explicit and non explicit tracks.
 
-**Test statistic**: |accuracy(explicit) − accuracy(non-explicit)| — two-sided, since we have no prior reason to expect which direction any bias would run.
+**Test statistic**: |accuracy(explicit)  accuracy(non-explicit)| — two sided, since we have no prior reason to expect which direction any bias would run.
 
 **Significance level**: α = 0.05
 
