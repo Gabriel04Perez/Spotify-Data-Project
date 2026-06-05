@@ -267,7 +267,7 @@ Additionally, `SimpleImputer(strategy='median')` was applied to the `tempo` colu
 |-------|---------------|--------------|
 | Baseline (Decision Tree, depth=3) | 0.4670 | 0.4480 |
 | Final (Random Forest + GridSearchCV) | 0.9805 | 0.7790 |
-| Improvement | — | +0.3310 |
+| Improvement | +0.5135 | +0.3310 |
 
 The Final Model improves substantially over the baseline. The Random Forest benefits from the full audio feature suite, the `energy_x_dance` interaction term, and the semantically grounded `speechiness` binarization — all of which expose genre-discriminative signals that the shallow decision tree could not capture.
 
