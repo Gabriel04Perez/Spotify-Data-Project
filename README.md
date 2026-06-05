@@ -124,9 +124,9 @@ Gospel and tango have no explicit tracks in this dataset. Among genres that do h
 
 ### NMAR Analysis
 
-The column with the most meaningful missingness in our cleaned dataset is **`tempo`**, missing for approximately 21% of tracks. I believe `tempo` is **not NMAR** (Not Missing At Random). For tempo to be NMAR, its missingness probability would need to depend on the unobserved tempo value itself — for example, Spotify's beat-detection algorithm failing specifically on tracks with unusually high or low BPM. While mechanistically plausible, our permutation tests below show that missingness is well-explained by observed columns (`track_genre` and `energy`), which is consistent with MAR rather than NMAR.
+The column with the most meaningful missingness in our cleaned dataset is **`tempo`**, missing for approximately 21% of tracks. I believe `tempo` is **not NMAR** (Not Missing At Random). For tempo to be NMAR, its missingness probability would need to depend on the unobserved tempo value itself. For example, Spotify's beat detection algorithm failing specifically on tracks with unusually high or low BPM. While plausible, our permutation tests below show that missingness is well explained by observed columns (`track_genre` and `energy`), which is consistent with MAR rather than NMAR.
 
-To rule out NMAR more definitively, we would want: raw Spotify API response logs showing whether tempo extraction returned an error vs. a null, or a flag for tracks with irregular or free-form time signatures. If very fast or very slow tempos are disproportionately missing, that would support NMAR; if failure rates are uniform within genre and energy strata, that supports MAR.
+To rule out NMAR more definitively, we would want: raw Spotify API response logs showing whether tempo extraction returned an error vs. a null, or a flag for tracks with irregular or free form time signatures. If very fast or very slow tempos are disproportionately missing, that would support NMAR. If failure rates are uniform within genre and energy strata, that supports MAR.
 
 ### Missingness Dependency
 
@@ -134,7 +134,7 @@ I performed three permutation tests assessing whether `tempo` missingness depend
 
 **Test 1: `tempo` missingness vs. `track_genre` — dependent (MAR)**
 
-Test statistic: Total Variation Distance (TVD) between the genre distribution of tracks with missing tempo and tracks without. After 1,000 permutations, the observed TVD was **0.1040** with a p-value of **0.0000**. Since p < 0.05, we reject the null and conclude tempo missingness **does depend on genre** — tango in particular contains many acoustic and arhythmic recordings where Spotify's beat-detection fails at higher rates.
+Test statistic: Total Variation Distance (TVD) between the genre distribution of tracks with missing tempo and tracks without. After 1,000 permutations, the observed TVD was **0.1040** with a p-value of **0.0000**. Since p < 0.05, we reject the null and conclude tempo missingness **does depend on genre**. Tango in particular contains many acoustic and arhythmic recordings where Spotify's beat detection fails at higher rates.
 
 <iframe
   src="assets/missingness_genre.html"
@@ -147,11 +147,11 @@ Test statistic: Total Variation Distance (TVD) between the genre distribution of
 
 **Test 2: `tempo` missingness vs. `energy` — dependent (MAR)**
 
-Test statistic: absolute difference in mean energy between missing and non-missing groups. The observed difference was **0.0971** with a p-value of **0.0000**. Since p < 0.05, we reject the null and conclude tempo missingness **does depend on energy** — low-energy tracks (quiet, sparse recordings) are less likely to have a detectable beat.
+Test statistic: absolute difference in mean energy between missing and non missing groups. The observed difference was **0.0971** with a p-value of **0.0000**. Since p < 0.05, we reject the null and conclude tempo missingness **does depend on energy**. Low-energy tracks (quiet, sparse recordings) are less likely to have a detectable beat.
 
 **Test 3: `tempo` missingness vs. `mode` — not dependent**
 
-Test statistic: TVD between mode distributions (major vs. minor) of missing and non-missing groups. Observed TVD was **0.0150** with a p-value of **0.3770**. Since p ≥ 0.05, we fail to reject the null — tempo missingness **does not depend on musical mode**. Whether a track is in a major or minor key has no mechanistic connection to whether Spotify can detect its tempo.
+Test statistic: TVD between mode distributions (major vs. minor) of missing and non missing groups. Observed TVD was **0.0150** with a p-value of **0.3770**. Since p ≥ 0.05, we fail to reject the null, tempo missingness **does not depend on musical mode**. Whether a track is in a major or minor key has no mechanistic connection to whether Spotify can detect its tempo.
 
 ---
 
